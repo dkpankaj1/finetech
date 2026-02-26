@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravolt\Avatar\Avatar;
 
 class User extends Authenticatable
 {
@@ -45,4 +46,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function profileImage()
+    {
+        $avatar = new Avatar();
+        return $avatar->create($this->name)->toBase64();
+    }
+
 }
