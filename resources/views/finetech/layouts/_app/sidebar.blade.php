@@ -183,12 +183,12 @@
             <div class="collapse" id="menuUserMgr">
                 <ul class="sub-menu">
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.users.index') }}" class="menu-link">
                             <span class="menu-text">User List</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.users.create') }}" class="menu-link">
                             <span class="menu-text">Create User</span>
                         </a>
                     </li>

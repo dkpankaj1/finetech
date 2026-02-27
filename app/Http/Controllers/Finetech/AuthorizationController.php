@@ -57,7 +57,7 @@ class AuthorizationController extends Controller
     public function update(Role $role, Request $request)
     {
         $request->validate([
-            "name" => ["required", Rule::unique('roles', 'name')->ignore($role->id),],
+            "name" => ["required", Rule::unique('roles', 'name')->ignore($role->id)],
             "permissions" => "array|exists:permissions,name"
         ]);
 

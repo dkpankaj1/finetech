@@ -6,6 +6,7 @@ use App\Http\Controllers\Finetech\DashboardController;
 use App\Http\Controllers\Finetech\ProfileController;
 use App\Http\Controllers\Finetech\SettingController;
 use App\Http\Controllers\Finetech\ThemeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
@@ -30,6 +31,8 @@ Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
 
         Route::resource('authorization', AuthorizationController::class)
             ->parameters(['authorization' => 'role']);
+
+        ROute::resource('users', UserController::class);
 
         Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
