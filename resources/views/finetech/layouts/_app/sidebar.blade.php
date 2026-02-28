@@ -167,10 +167,25 @@
 
         <!-- Branches -->
         <li class="menu-item">
-            <a href="#" class="menu-link waves-effect">
+            <a href="#menuBranches" data-bs-toggle="collapse" class="menu-link waves-effect">
                 <span class="menu-icon"><i data-lucide="git-branch"></i></span>
                 <span class="menu-text">Branches</span>
+                <span class="menu-arrow"></span>
             </a>
+            <div class="collapse" id="menuBranches">
+                <ul class="sub-menu">
+                    <li class="menu-item">
+                        <a href="{{ route('finetech.branches.index') }}" class="menu-link">
+                            <span class="menu-text">Branch List</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('finetech.branches.create') }}" class="menu-link">
+                            <span class="menu-text">Add New Branch</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <!-- Customers -->
