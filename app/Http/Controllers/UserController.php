@@ -25,6 +25,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'aadhar_number' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'is_active' => 'required|boolean',
             'role' => 'required|string|exists:roles,name',
         ]);
 
@@ -34,6 +42,14 @@ class UserController extends Controller
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => bcrypt($request->password),
+                    'aadhar_number' => $request->aadhar_number ?? null,
+                    'phone_number' => $request->phone_number ?? null,
+                    'address' => $request->address ?? null,
+                    'city' => $request->city ?? null,
+                    'state' => $request->state ?? null,
+                    'postal_code' => $request->postal_code ?? null,
+                    'country' => $request->country ?? null,
+                    'is_active' => $request->is_active ?? 0,
                 ]);
                 $user->assignRole($request->role);
             });
@@ -63,6 +79,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'aadhar_number' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'postal_code' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'is_active' => 'required|boolean',
             'role' => 'required|string|exists:roles,name',
         ]);
 
@@ -71,6 +95,14 @@ class UserController extends Controller
                 $user->update([
                     'name' => $request->name,
                     'email' => $request->email,
+                    'aadhar_number' => $request->aadhar_number ?? $user->aadhar_number,
+                    'phone_number' => $request->phone_number ?? $user->phone_number,
+                    'address' => $request->address ?? $user->address,
+                    'city' => $request->city ?? $user->city,
+                    'state' => $request->state ?? $user->state,
+                    'postal_code' => $request->postal_code ?? $user->postal_code,
+                    'country' => $request->country ?? $user->country,
+                    'is_active' => $request->is_active ?? $user->is_active,
                 ]);
 
                 if ($request->filled('password')) {
