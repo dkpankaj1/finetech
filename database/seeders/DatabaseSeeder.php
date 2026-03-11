@@ -15,12 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(CurrencySeeder::class);
+        $this->call(SystemSettingSeeder::class);
         $this->call(RolePermissionSeeder::class);
 
-        User::create([
+        # Create default super admin user 
+        $superuser = User::create([
             'name' => 'Finetech admin',
             'email' => 'finetech@gmail.com',
             'password' => bcrypt('finetech123'),
         ]);
+        $superuser->assignRole('super_admin');
+
+        # Create default admin user
+        $user = User::create([
+            'name' => 'user',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('user123'),
+        ]);
+        $user->assignRole('admin');
+
+
+
     }
 }

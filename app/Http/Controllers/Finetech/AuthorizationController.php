@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Finetech;
 
 use App\Http\Controllers\Controller;
 use App\Models\PermissionGroup;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 
 class AuthorizationController extends Controller
 {
