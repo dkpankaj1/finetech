@@ -1,13 +1,18 @@
 <?php
 
+use App\Http\Controllers\Finetech\AccountController;
+use App\Http\Controllers\Finetech\AccountTypeMasterController;
 use App\Http\Controllers\Finetech\AuthenticationController;
+use App\Http\Controllers\Finetech\CustomerController;
+use App\Http\Controllers\Finetech\KycDocumentController;
 use App\Http\Controllers\Finetech\AuthorizationController;
 use App\Http\Controllers\Finetech\BranchController;
+use App\Http\Controllers\Finetech\CurrencyMasterController;
 use App\Http\Controllers\Finetech\DashboardController;
 use App\Http\Controllers\Finetech\ProfileController;
 use App\Http\Controllers\Finetech\SettingController;
 use App\Http\Controllers\Finetech\ThemeController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Finetech\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
@@ -33,9 +38,19 @@ Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
         Route::resource('authorization', AuthorizationController::class)
             ->parameters(['authorization' => 'role']);
 
-        ROute::resource('users', UserController::class);
+        Route::resource('users', UserController::class);
 
         Route::resource('branches', BranchController::class);
+
+        Route::resource('currencies', CurrencyMasterController::class);
+
+        Route::resource('account-types', AccountTypeMasterController::class);
+
+        Route::resource('customers', CustomerController::class);
+
+        Route::resource('accounts', AccountController::class);
+
+        Route::resource('kyc-documents', KycDocumentController::class);
 
         Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
