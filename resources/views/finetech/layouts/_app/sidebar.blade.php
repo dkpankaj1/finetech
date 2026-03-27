@@ -21,12 +21,12 @@
             <div class="collapse" id="menuFDS">
                 <ul class="sub-menu">
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.fds.index') }}" class="menu-link">
                             <span class="menu-text">View FDS</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.fds.create') }}" class="menu-link">
                             <span class="menu-text">Create FDS</span>
                         </a>
                     </li>
@@ -82,7 +82,7 @@
 
         <!-- Transactions -->
         <li class="menu-item">
-            <a href="#" class="menu-link waves-effect">
+            <a href="{{ route('finetech.transactions.index') }}" class="menu-link waves-effect">
                 <span class="menu-icon"><i data-lucide="file-clock"></i></span>
                 <span class="menu-text">Transactions</span>
             </a>

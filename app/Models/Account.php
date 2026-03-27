@@ -67,4 +67,9 @@ class Account extends Model
     {
         return $this->hasMany(Withdrawal::class);
     }
+
+    public function fixedDeposits()
+    {
+        return $this->hasMany(FixedDeposit::class);
+    }
 }

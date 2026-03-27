@@ -81,7 +81,32 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         $account->load('customer', 'accountType', 'branch', 'currency', 'openedBy');
-        return view('finetech.accounts.show', ['account' => $account]);
+
+        $recentDeposits = $account->deposits()
+            ->latest('deposited_at')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recentWithdrawals = $account->withdrawals()
+            ->latest('withdrawn_at')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $fixedDeposits = $account->fixedDeposits()
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('finetech.accounts.show', [
+            'account'           => $account,
+            'recentDeposits'    => $recentDeposits,
+            'recentWithdrawals' => $recentWithdrawals,
+            'fixedDeposits'     => $fixedDeposits,
+            'totalDeposited'    => $account->deposits()->sum('amount'),
+            'totalWithdrawn'    => $account->withdrawals()->sum('amount'),
+        ]);
     }
 
     public function edit(Account $account)
