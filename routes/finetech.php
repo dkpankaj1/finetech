@@ -4,6 +4,7 @@ use App\Http\Controllers\Finetech\AccountController;
 use App\Http\Controllers\Finetech\AccountTypeMasterController;
 use App\Http\Controllers\Finetech\AuthenticationController;
 use App\Http\Controllers\Finetech\CustomerController;
+use App\Http\Controllers\Finetech\DepositController;
 use App\Http\Controllers\Finetech\KycDocumentController;
 use App\Http\Controllers\Finetech\AuthorizationController;
 use App\Http\Controllers\Finetech\BranchController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Finetech\ProfileController;
 use App\Http\Controllers\Finetech\SettingController;
 use App\Http\Controllers\Finetech\ThemeController;
 use App\Http\Controllers\Finetech\UserController;
+use App\Http\Controllers\Finetech\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
@@ -49,6 +51,10 @@ Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
         Route::resource('customers', CustomerController::class);
 
         Route::resource('accounts', AccountController::class);
+
+        Route::resource('deposits', DepositController::class)->only(['index', 'create', 'store', 'show']);
+
+        Route::resource('withdrawals', WithdrawalController::class)->only(['index', 'create', 'store', 'show']);
 
         Route::resource('kyc-documents', KycDocumentController::class);
 

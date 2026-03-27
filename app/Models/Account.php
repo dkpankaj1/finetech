@@ -57,4 +57,14 @@ class Account extends Model
     {
         return $this->belongsTo(User::class, 'opened_by');
     }
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
 }

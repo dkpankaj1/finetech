@@ -31,11 +31,11 @@
             <div class="card border-0 h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
+                        <div class="grow">
                             <p class="text-muted small mb-1">Total Balance</p>
-                            <h4 class="fw-bold mb-1">₹ 24,58,200</h4>
+                            <h4 class="fw-bold mb-1">₹ {{ number_format($totalBalance, 2) }}</h4>
                             <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                <i class="fas fa-arrow-up me-1"></i>+8.2% this month
+                                <i class="fas fa-wallet me-1"></i>All accounts
                             </span>
                         </div>
                         <div class="ms-3 rounded-3 d-flex align-items-center justify-content-center bg-primary bg-opacity-10"
@@ -52,11 +52,11 @@
             <div class="card border-0 h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
+                        <div class="grow">
                             <p class="text-muted small mb-1">Total Deposits</p>
-                            <h4 class="fw-bold mb-1">₹ 84,00,500</h4>
+                            <h4 class="fw-bold mb-1">₹ {{ number_format($totalDeposits, 2) }}</h4>
                             <span class="badge bg-info-subtle text-info border border-info-subtle">
-                                <i class="fas fa-arrow-up me-1"></i>+3.5% this month
+                                <i class="fas fa-piggy-bank me-1"></i>Opening balances
                             </span>
                         </div>
                         <div class="ms-3 rounded-3 d-flex align-items-center justify-content-center bg-info bg-opacity-10"
@@ -68,21 +68,21 @@
             </div>
         </div>
 
-        {{-- Active Loans --}}
+        {{-- Total Customers --}}
         <div class="col-sm-6 col-xl-3">
             <div class="card border-0 h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
-                            <p class="text-muted small mb-1">Active Loans</p>
-                            <h4 class="fw-bold mb-1">₹ 12,15,000</h4>
+                        <div class="grow">
+                            <p class="text-muted small mb-1">Total Customers</p>
+                            <h4 class="fw-bold mb-1">{{ number_format($totalCustomers) }}</h4>
                             <span class="badge bg-warning-subtle text-warning border border-warning-subtle">
-                                <i class="fas fa-arrow-down me-1"></i>-1.2% this month
+                                <i class="fas fa-user-plus me-1"></i>{{ $newCustomersThisMonth }} new this month
                             </span>
                         </div>
                         <div class="ms-3 rounded-3 d-flex align-items-center justify-content-center bg-warning bg-opacity-10"
                             style="width:52px;height:52px;">
-                            <i class="fas fa-file-invoice-dollar fa-lg text-warning"></i>
+                            <i class="fas fa-user-friends fa-lg text-warning"></i>
                         </div>
                     </div>
                 </div>
@@ -94,11 +94,11 @@
             <div class="card border-0 h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="flex-grow-1">
+                        <div class="grow">
                             <p class="text-muted small mb-1">Branches</p>
-                            <h4 class="fw-bold mb-1">12</h4>
+                            <h4 class="fw-bold mb-1">{{ number_format($totalBranches) }}</h4>
                             <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                                <i class="fas fa-plus me-1"></i>2 added this year
+                                <i class="fas fa-plus me-1"></i>{{ $newBranchesThisYear }} added this year
                             </span>
                         </div>
                         <div class="ms-3 rounded-3 d-flex align-items-center justify-content-center bg-secondary bg-opacity-10"
@@ -115,10 +115,10 @@
     {{-- ─── Row 2: Secondary Stats ──────────────────────────────────────────── --}}
     <div class="row g-3 mb-3">
         @foreach ([
-            ['fas fa-users', 'text-primary', 'bg-primary', 'Total Users', '1,248', '48 new this month'],
-            ['fas fa-exchange-alt', 'text-success', 'bg-success', "Today's Txns", '342', 'processed today'],
-            ['fas fa-clock', 'text-danger', 'bg-danger', 'Pending', '17', 'awaiting approval'],
-            ['fas fa-landmark', 'text-info', 'bg-info', 'FD Accounts', '890', 'active FDs'],
+            ['fas fa-users', 'text-primary', 'bg-primary', 'Total Users', number_format($totalUsers), $newUsersThisMonth . ' new this month'],
+            ['fas fa-university', 'text-success', 'bg-success', 'Total Accounts', number_format($totalAccounts), $activeAccounts . ' active'],
+            ['fas fa-clock', 'text-danger', 'bg-danger', 'Pending KYC', number_format($pendingKyc), 'awaiting review'],
+            ['fas fa-landmark', 'text-info', 'bg-info', 'Account Types', number_format($activeAccountTypes), 'active types'],
         ] as [$icon, $textColor, $bgColor, $label, $value, $sub])
             <div class="col-sm-6 col-xl-3">
                 <div class="card border-0 h-100">
@@ -148,7 +148,7 @@
             <div class="card border-0 mb-3">
                 <div class="card-header bg-primary bg-opacity-10 border-0 py-3 d-flex justify-content-between align-items-center">
                     <h6 class="mb-0 fw-semibold text-primary">
-                        <i class="fas fa-chart-line me-2"></i>Balance Trend (2026)
+                        <i class="fas fa-chart-line me-2"></i>Account Trend ({{ now()->year }})
                     </h6>
                     <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Monthly</span>
                 </div>
@@ -157,61 +157,62 @@
                 </div>
             </div>
 
-            {{-- Recent Transactions --}}
+            {{-- Recent Accounts --}}
             <div class="card border-0">
                 <div class="card-header bg-success bg-opacity-10 border-0 py-3 d-flex justify-content-between align-items-center">
                     <h6 class="mb-0 fw-semibold text-success">
-                        <i class="fas fa-exchange-alt me-2"></i>Recent Transactions
+                        <i class="fas fa-university me-2"></i>Recent Accounts
                     </h6>
-                    <a href="#" class="btn btn-sm btn-outline-success">View All</a>
+                    <a href="{{ route('finetech.accounts.index') }}" class="btn btn-sm btn-outline-success">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="ps-3">#</th>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Account</th>
+                                    <th class="ps-3">Account #</th>
+                                    <th>Customer</th>
                                     <th>Type</th>
-                                    <th class="text-end pe-3">Amount</th>
+                                    <th>Branch</th>
+                                    <th>Status</th>
+                                    <th class="text-end pe-3">Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ([
-                                    ['TXN10021', '28 Feb 2026', 'Salary Credit', 'SB-00421', 'credit', '₹ 85,000'],
-                                    ['TXN10020', '27 Feb 2026', 'Electricity Bill', 'SB-00421', 'debit', '₹ 2,340'],
-                                    ['TXN10019', '26 Feb 2026', 'FD Maturity', 'FD-00102', 'credit', '₹ 1,24,500'],
-                                    ['TXN10018', '25 Feb 2026', 'Loan EMI', 'LN-00034', 'debit', '₹ 9,200'],
-                                    ['TXN10017', '24 Feb 2026', 'NEFT Transfer', 'SB-00421', 'debit', '₹ 15,000'],
-                                    ['TXN10016', '24 Feb 2026', 'Interest Credit', 'SB-00421', 'credit', '₹ 1,240'],
-                                ] as $i => [$txn, $date, $desc, $acc, $type, $amt])
+                                @forelse ($recentAccounts as $account)
                                     <tr>
-                                        <td class="ps-3 text-muted small">{{ $txn }}</td>
-                                        <td class="small">{{ $date }}</td>
-                                        <td class="small fw-semibold">{{ $desc }}</td>
+                                        <td class="ps-3 text-muted small">{{ $account->account_number }}</td>
+                                        <td class="small fw-semibold">{{ $account->customer?->first_name }} {{ $account->customer?->last_name }}</td>
                                         <td>
-                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                                                {{ $acc }}
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle">
+                                                {{ $account->accountType?->name ?? '-' }}
                                             </span>
                                         </td>
+                                        <td class="small">{{ $account->branch?->name ?? '-' }}</td>
                                         <td>
-                                            @if ($type === 'credit')
+                                            @if ($account->status === 'active')
                                                 <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                                    <i class="fas fa-arrow-down me-1"></i>Credit
+                                                    <i class="fas fa-check-circle me-1"></i>Active
+                                                </span>
+                                            @elseif ($account->status === 'inactive')
+                                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">
+                                                    <i class="fas fa-pause-circle me-1"></i>Inactive
                                                 </span>
                                             @else
-                                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                                                    <i class="fas fa-arrow-up me-1"></i>Debit
+                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                                    {{ ucfirst($account->status ?? 'N/A') }}
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="text-end pe-3 small fw-semibold {{ $type === 'credit' ? 'text-success' : 'text-danger' }}">
-                                            {{ $type === 'debit' ? '-' : '+' }}{{ $amt }}
+                                        <td class="text-end pe-3 small fw-semibold">
+                                            ₹ {{ number_format($account->current_balance, 2) }}
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">No accounts found.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -233,15 +234,15 @@
                 <div class="card-body">
                     <div class="row g-2">
                         @foreach ([
-                            ['fas fa-paper-plane', 'primary', 'Send Money'],
-                            ['fas fa-hand-holding-usd', 'success', 'Request'],
-                            ['fas fa-plus-circle', 'info', 'Top Up'],
-                            ['fas fa-file-invoice', 'warning', 'Pay Bills'],
-                            ['fas fa-university', 'secondary', 'Branches'],
-                            ['fas fa-users', 'danger', 'Users'],
-                        ] as [$icon, $color, $label])
+                            ['fas fa-user-plus', 'primary', 'New Customer', route('finetech.customers.create')],
+                            ['fas fa-plus-circle', 'success', 'New Account', route('finetech.accounts.create')],
+                            ['fas fa-id-card', 'info', 'KYC Docs', route('finetech.kyc-documents.index')],
+                            ['fas fa-file-invoice', 'warning', 'Acc. Types', route('finetech.account-types.index')],
+                            ['fas fa-university', 'secondary', 'Branches', route('finetech.branches.index')],
+                            ['fas fa-users', 'danger', 'Users', route('finetech.users.index')],
+                        ] as [$icon, $color, $label, $link])
                             <div class="col-4">
-                                <a href="#"
+                                <a href="{{ $link }}"
                                     class="d-flex flex-column align-items-center justify-content-center rounded-3 p-2 text-decoration-none bg-{{ $color }} bg-opacity-10 border border-{{ $color }}-subtle"
                                     style="min-height:68px;">
                                     <i class="{{ $icon }} text-{{ $color }} mb-1"></i>
@@ -261,44 +262,41 @@
                     </h6>
                 </div>
                 <div class="card-body p-0">
-                    @foreach ([
-                        ['Mumbai Main', 'MH', '₹ 9,24,000', 92],
-                        ['Delhi Central', 'DL', '₹ 7,12,000', 71],
-                        ['Bangalore HQ', 'KA', '₹ 6,80,000', 68],
-                        ['Chennai South', 'TN', '₹ 4,20,000', 42],
-                    ] as [$name, $state, $balance, $pct])
+                    @forelse ($topBranches as $branch)
                         <div class="px-3 py-2 border-bottom">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <div class="fw-semibold small">{{ $name }}
-                                    <span class="badge bg-secondary-subtle text-secondary ms-1">{{ $state }}</span>
+                                <div class="fw-semibold small">{{ $branch->name }}
+                                    <span class="badge bg-secondary-subtle text-secondary ms-1">{{ $branch->state ?? '-' }}</span>
                                 </div>
-                                <span class="small text-muted">{{ $balance }}</span>
+                                <span class="small text-muted">₹ {{ number_format($branch->total_balance, 2) }}</span>
                             </div>
                             <div class="progress" style="height:4px;">
-                                <div class="progress-bar bg-info" style="width:{{ $pct }}%"></div>
+                                <div class="progress-bar bg-info" style="width:{{ round(($branch->total_balance / $maxBranchBalance) * 100) }}%"></div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="px-3 py-3 text-center text-muted small">No branches found.</div>
+                    @endforelse
                 </div>
             </div>
 
-            {{-- Notifications --}}
+            {{-- System Summary --}}
             <div class="card border-0">
                 <div class="card-header bg-danger bg-opacity-10 border-0 py-3">
                     <h6 class="mb-0 fw-semibold text-danger">
-                        <i class="fas fa-bell me-2"></i>Notifications
+                        <i class="fas fa-info-circle me-2"></i>System Summary
                     </h6>
                 </div>
                 <div class="card-body p-0">
                     @foreach ([
-                        ['success', 'fas fa-check-circle', 'Salary of ₹85,000 credited.', '2 min ago'],
-                        ['warning', 'fas fa-clock', 'Loan EMI due in 3 days.', '1 hr ago'],
-                        ['info', 'fas fa-info-circle', 'FD FD-00102 matured. Renew now.', 'Yesterday'],
-                        ['danger', 'fas fa-exclamation-triangle', '17 transactions pending approval.', 'Today'],
+                        ['primary', 'fas fa-users', number_format($totalUsers) . ' registered users in the system.', $newUsersThisMonth . ' new this month'],
+                        ['success', 'fas fa-university', number_format($totalAccounts) . ' total accounts created.', $activeAccounts . ' currently active'],
+                        ['warning', 'fas fa-id-card', number_format($pendingKyc) . ' KYC documents pending review.', 'Action required'],
+                        ['info', 'fas fa-user-friends', number_format($totalCustomers) . ' customers onboarded.', $newCustomersThisMonth . ' new this month'],
                     ] as [$color, $icon, $text, $time])
                         <div class="d-flex align-items-start gap-2 px-3 py-2 border-bottom">
                             <div class="mt-1 text-{{ $color }}"><i class="{{ $icon }} fa-fw"></i></div>
-                            <div class="flex-grow-1">
+                            <div class="grow">
                                 <div class="small">{{ $text }}</div>
                                 <div class="text-muted" style="font-size:11px;">{{ $time }}</div>
                             </div>
@@ -325,7 +323,7 @@
                         datasets: [
                             {
                                 label: 'Balance (₹)',
-                                data: [18000, 21000, 24582, 22000, 26000, 29000, 31000, 28500, 33000, 35000, 38000, 41000],
+                                data: @json($chartBalances),
                                 borderColor: '#556ee6',
                                 backgroundColor: 'rgba(85,110,230,0.1)',
                                 fill: true,
@@ -334,14 +332,15 @@
                                 pointRadius: 4,
                             },
                             {
-                                label: 'Deposits (₹)',
-                                data: [60000, 65000, 72000, 69000, 75000, 80000, 84000, 82000, 88000, 91000, 94000, 98000],
+                                label: 'Accounts Opened',
+                                data: @json($chartCounts),
                                 borderColor: '#34c38f',
                                 backgroundColor: 'rgba(52,195,143,0.07)',
                                 fill: true,
                                 tension: 0.4,
                                 pointBackgroundColor: '#34c38f',
                                 pointRadius: 4,
+                                yAxisID: 'y1',
                             }
                         ]
                     },
@@ -360,7 +359,15 @@
                                 grid: { color: gridColor },
                                 ticks: {
                                     color: textColor,
-                                    callback: v => '₹' + (v / 1000) + 'k'
+                                    callback: v => '₹' + (v / 1000).toLocaleString() + 'k'
+                                }
+                            },
+                            y1: {
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                ticks: {
+                                    color: textColor,
+                                    stepSize: 1,
                                 }
                             }
                         }

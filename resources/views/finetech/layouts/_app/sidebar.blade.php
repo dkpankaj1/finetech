@@ -44,12 +44,12 @@
             <div class="collapse" id="menuDeposits">
                 <ul class="sub-menu">
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.deposits.index') }}" class="menu-link">
                             <span class="menu-text">View Deposits</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.deposits.create') }}" class="menu-link">
                             <span class="menu-text">New Deposit</span>
                         </a>
                     </li>
@@ -67,12 +67,12 @@
             <div class="collapse" id="menuWithdrawals">
                 <ul class="sub-menu">
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.withdrawals.index') }}" class="menu-link">
                             <span class="menu-text">View Withdrawals</span>
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.withdrawals.create') }}" class="menu-link">
                             <span class="menu-text">New Withdrawal</span>
                         </a>
                     </li>
