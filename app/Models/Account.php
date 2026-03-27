@@ -72,4 +72,19 @@ class Account extends Model
     {
         return $this->hasMany(FixedDeposit::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function outgoingTransfers()
+    {
+        return $this->hasMany(Transfer::class, 'source_account_id');
+    }
+
+    public function incomingTransfers()
+    {
+        return $this->hasMany(Transfer::class, 'destination_account_id');
+    }
 }

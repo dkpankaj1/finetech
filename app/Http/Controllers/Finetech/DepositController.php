@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Finetech;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Deposit;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -53,20 +54,44 @@ class DepositController extends Controller
                     throw new \RuntimeException('Only active accounts can receive deposits.');
                 }
 
+                $amount = (float) $request->amount;
+                $openingBalance = (float) $account->current_balance;
+                $closingBalance = $openingBalance + $amount;
+
                 $deposit = Deposit::create([
                     'account_id'    => $account->id,
                     'customer_id'   => $account->customer_id,
                     'branch_id'     => $account->branch_id,
                     'currency_id'   => $account->currency_id,
                     'reference_no'  => $this->generateReferenceNo(),
-                    'amount'        => $request->amount,
+                    'amount'        => $amount,
                     'source'        => $request->source,
                     'remarks'       => $request->remarks,
                     'deposited_at'  => $request->deposited_at,
                     'deposited_by'  => Auth::id(),
                 ]);
 
-                $account->increment('current_balance', (float) $request->amount);
+                $transaction = Transaction::create([
+                    'reference_no'             => $deposit->reference_no,
+                    'account_id'               => $account->id,
+                    'customer_id'              => $account->customer_id,
+                    'branch_id'                => $account->branch_id,
+                    'currency_id'              => $account->currency_id,
+                    'transaction_type'         => 'deposit',
+                    'source'                   => $request->source,
+                    'amount'                   => $amount,
+                    'opening_balance'          => $openingBalance,
+                    'closing_balance'          => $closingBalance,
+                    'remarks'                  => $request->remarks,
+                    'transacted_at'            => $request->deposited_at,
+                    'created_by'               => Auth::id(),
+                    'transactionable_type'     => Deposit::class,
+                    'transactionable_id'       => $deposit->id,
+                ]);
+
+                $deposit->update(['transaction_id' => $transaction->id]);
+
+                $account->update(['current_balance' => $closingBalance]);
                 $account->update(['last_transaction_at' => $request->deposited_at]);
 
                 return $deposit;

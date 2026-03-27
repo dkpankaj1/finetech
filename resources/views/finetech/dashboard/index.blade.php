@@ -13,11 +13,31 @@
                 </p>
             </div>
             <div class="col-lg-6">
-                <div class="d-none d-lg-block">
-                    <ol class="breadcrumb m-0 float-end">
-                        <li class="breadcrumb-item"><a href="{{ route('finetech.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Home</li>
-                    </ol>
+                <div class="d-flex flex-column align-items-lg-end gap-2">
+                   
+                    <div class="d-none d-lg-block">
+                        <ol class="breadcrumb m-0 float-end">
+                            <li class="breadcrumb-item"><a href="{{ route('finetech.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Home</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                     <form action="{{ route('finetech.accounts.search') }}" method="GET" class="w-100" style="max-width:460px;">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="q" class="form-control"
+                                placeholder="Search account by name, account no, mobile...">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

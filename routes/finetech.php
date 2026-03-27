@@ -13,6 +13,7 @@ use App\Http\Controllers\Finetech\CurrencyMasterController;
 use App\Http\Controllers\Finetech\DashboardController;
 use App\Http\Controllers\Finetech\ProfileController;
 use App\Http\Controllers\Finetech\SettingController;
+use App\Http\Controllers\Finetech\TransferController;
 use App\Http\Controllers\Finetech\TransactionController;
 use App\Http\Controllers\Finetech\ThemeController;
 use App\Http\Controllers\Finetech\UserController;
@@ -52,6 +53,8 @@ Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
 
         Route::resource('customers', CustomerController::class);
 
+        Route::get('accounts/search', [AccountController::class, 'search'])->name('accounts.search');
+
         Route::resource('accounts', AccountController::class);
 
         Route::resource('fds', FdsController::class)->only(['index', 'create', 'store', 'show']);
@@ -59,6 +62,8 @@ Route::group(['prefix' => 'finetech', 'as' => 'finetech.'], function () {
         Route::resource('deposits', DepositController::class)->only(['index', 'create', 'store', 'show']);
 
         Route::resource('withdrawals', WithdrawalController::class)->only(['index', 'create', 'store', 'show']);
+
+        Route::resource('transfers', TransferController::class)->only(['index', 'create', 'store', 'show']);
 
         Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
 

@@ -80,6 +80,29 @@
             </div>
         </li>
 
+        <!-- Transfers -->
+        <li class="menu-item">
+            <a href="#menuTransfers" data-bs-toggle="collapse" class="menu-link waves-effect">
+                <span class="menu-icon"><i data-lucide="send"></i></span>
+                <span class="menu-text">Transfers</span>
+                <span class="menu-arrow"></span>
+            </a>
+            <div class="collapse" id="menuTransfers">
+                <ul class="sub-menu">
+                    <li class="menu-item">
+                        <a href="{{ route('finetech.transfers.index') }}" class="menu-link">
+                            <span class="menu-text">View Transfers</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('finetech.transfers.create') }}" class="menu-link">
+                            <span class="menu-text">New Transfer</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <!-- Transactions -->
         <li class="menu-item">
             <a href="{{ route('finetech.transactions.index') }}" class="menu-link waves-effect">
@@ -111,7 +134,7 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#" class="menu-link">
+                        <a href="{{ route('finetech.accounts.search') }}" class="menu-link">
                             <span class="menu-text">Search Account</span>
                         </a>
                     </li>

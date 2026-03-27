@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->assignRole('admin');
 
-
+        $this->call(TestDataSeeder::class);
 
     }
 }

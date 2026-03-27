@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Deposit extends Model
 {
     protected $fillable = [
+        'transaction_id',
         'account_id',
         'customer_id',
         'branch_id',
@@ -47,5 +48,10 @@ class Deposit extends Model
     public function depositor()
     {
         return $this->belongsTo(User::class, 'deposited_by');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 }

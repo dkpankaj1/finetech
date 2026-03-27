@@ -33,6 +33,8 @@
                             <option value="">All</option>
                             <option value="deposit" {{ ($filters['type'] ?? '') === 'deposit' ? 'selected' : '' }}>Deposit</option>
                             <option value="withdrawal" {{ ($filters['type'] ?? '') === 'withdrawal' ? 'selected' : '' }}>Withdrawal</option>
+                            <option value="transfer_out" {{ ($filters['type'] ?? '') === 'transfer_out' ? 'selected' : '' }}>Transfer Out</option>
+                            <option value="transfer_in" {{ ($filters['type'] ?? '') === 'transfer_in' ? 'selected' : '' }}>Transfer In</option>
                         </select>
                     </div>
 
@@ -85,6 +87,8 @@
                             <th>Customer</th>
                             <th>Source</th>
                             <th class="text-end">Amount</th>
+                            <th class="text-end">Opening</th>
+                            <th class="text-end">Closing</th>
                             <th>Date & Time</th>
                             <th>By</th>
                             <th class="text-end pe-3">Action</th>
@@ -92,37 +96,55 @@
                     </thead>
                     <tbody>
                         @forelse ($transactions as $index => $transaction)
+                            @php
+                                $isCredit = in_array($transaction->transaction_type, ['deposit', 'transfer_in']);
+                                $showUrl = '#';
+
+                                if ($transaction->transactionable_type === 'App\\Models\\Deposit') {
+                                    $showUrl = route('finetech.deposits.show', $transaction->transactionable_id);
+                                } elseif ($transaction->transactionable_type === 'App\\Models\\Withdrawal') {
+                                    $showUrl = route('finetech.withdrawals.show', $transaction->transactionable_id);
+                                } elseif ($transaction->transactionable_type === 'App\\Models\\Transfer') {
+                                    $showUrl = route('finetech.transfers.show', $transaction->transactionable_id);
+                                }
+                            @endphp
                             <tr>
                                 <td class="ps-3 text-muted small">{{ $index + 1 }}</td>
                                 <td>
                                     <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                                        {{ $transaction['reference_no'] }}
+                                        {{ $transaction->reference_no }}
                                     </span>
                                 </td>
                                 <td>
-                                    @if ($transaction['transaction_type'] === 'deposit')
+                                    @if ($transaction->transaction_type === 'deposit')
                                         <span class="badge bg-success-subtle text-success border border-success-subtle">Deposit</span>
-                                    @else
+                                    @elseif ($transaction->transaction_type === 'withdrawal')
                                         <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Withdrawal</span>
+                                    @elseif ($transaction->transaction_type === 'transfer_out')
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Transfer Out</span>
+                                    @else
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle">Transfer In</span>
                                     @endif
                                 </td>
-                                <td class="small fw-semibold">{{ $transaction['account_no'] }}</td>
-                                <td class="small">{{ $transaction['customer_name'] }}</td>
-                                <td class="small">{{ ucwords(str_replace('_', ' ', $transaction['source'])) }}</td>
-                                <td class="text-end fw-semibold small {{ $transaction['transaction_type'] === 'deposit' ? 'text-success' : 'text-danger' }}">
-                                    {{ $transaction['transaction_type'] === 'deposit' ? '+' : '-' }}{{ $transaction['currency_symbol'] }}{{ number_format($transaction['amount'], 2) }}
+                                <td class="small fw-semibold">{{ $transaction->account?->account_number }}</td>
+                                <td class="small">{{ $transaction->customer?->first_name }} {{ $transaction->customer?->last_name }}</td>
+                                <td class="small">{{ ucwords(str_replace('_', ' ', $transaction->source)) }}</td>
+                                <td class="text-end fw-semibold small {{ $isCredit ? 'text-success' : 'text-danger' }}">
+                                    {{ $isCredit ? '+' : '-' }}{{ $transaction->currency?->symbol }}{{ number_format($transaction->amount, 2) }}
                                 </td>
-                                <td class="small text-muted">{{ optional($transaction['transacted_at'])->format('d M Y h:i A') }}</td>
-                                <td class="small">{{ $transaction['created_by'] }}</td>
+                                <td class="text-end small">{{ $transaction->currency?->symbol }}{{ number_format($transaction->opening_balance, 2) }}</td>
+                                <td class="text-end small fw-semibold">{{ $transaction->currency?->symbol }}{{ number_format($transaction->closing_balance, 2) }}</td>
+                                <td class="small text-muted">{{ optional($transaction->transacted_at)->format('d M Y h:i A') }}</td>
+                                <td class="small">{{ $transaction->creator?->name ?? 'System' }}</td>
                                 <td class="text-end pe-3">
-                                    <a href="{{ $transaction['show_url'] }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ $showUrl }}" class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye me-1"></i>View
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center py-5 text-muted">
+                                <td colspan="12" class="text-center py-5 text-muted">
                                     <i class="fas fa-receipt fa-2x mb-2 d-block opacity-25"></i>
                                     No transactions found for selected filters.
                                 </td>

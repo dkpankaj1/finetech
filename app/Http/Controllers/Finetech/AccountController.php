@@ -30,6 +30,34 @@ class AccountController extends Controller
     {
         return view('finetech.accounts.index', [
             'accounts' => Account::with('customer', 'accountType', 'branch', 'currency')->latest()->get(),
+            'searchQuery' => null,
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $searchQuery = trim((string) $request->get('q', ''));
+
+        $accountsQuery = Account::with('customer', 'accountType', 'branch', 'currency')->latest();
+
+        if ($searchQuery !== '') {
+            $accountsQuery->where(function ($query) use ($searchQuery) {
+                $query->where('account_number', 'like', "%{$searchQuery}%")
+                    ->orWhereHas('customer', function ($customerQuery) use ($searchQuery) {
+                        $customerQuery
+                            ->where('customer_number', 'like', "%{$searchQuery}%")
+                            ->orWhere('phone', 'like', "%{$searchQuery}%")
+                            ->orWhere('email', 'like', "%{$searchQuery}%")
+                            ->orWhere('first_name', 'like', "%{$searchQuery}%")
+                            ->orWhere('last_name', 'like', "%{$searchQuery}%")
+                            ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$searchQuery}%"]);
+                    });
+            });
+        }
+
+        return view('finetech.accounts.index', [
+            'accounts' => $accountsQuery->get(),
+            'searchQuery' => $searchQuery,
         ]);
     }
 

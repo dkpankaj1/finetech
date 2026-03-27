@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Withdrawal extends Model
 {
     protected $fillable = [
+        'transaction_id',
         'account_id',
         'customer_id',
         'branch_id',
@@ -47,5 +48,10 @@ class Withdrawal extends Model
     public function withdrawer()
     {
         return $this->belongsTo(User::class, 'withdrawn_by');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Finetech;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\Transaction;
 use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,7 +84,30 @@ class WithdrawalController extends Controller
                     'withdrawn_by'  => Auth::id(),
                 ]);
 
-                $account->decrement('current_balance', $amount);
+                $openingBalance = (float) $account->current_balance;
+                $closingBalance = $openingBalance - $amount;
+
+                $transaction = Transaction::create([
+                    'reference_no'         => $withdrawal->reference_no,
+                    'account_id'           => $account->id,
+                    'customer_id'          => $account->customer_id,
+                    'branch_id'            => $account->branch_id,
+                    'currency_id'          => $account->currency_id,
+                    'transaction_type'     => 'withdrawal',
+                    'source'               => $request->source,
+                    'amount'               => $amount,
+                    'opening_balance'      => $openingBalance,
+                    'closing_balance'      => $closingBalance,
+                    'remarks'              => $request->remarks,
+                    'transacted_at'        => $request->withdrawn_at,
+                    'created_by'           => Auth::id(),
+                    'transactionable_type' => Withdrawal::class,
+                    'transactionable_id'   => $withdrawal->id,
+                ]);
+
+                $withdrawal->update(['transaction_id' => $transaction->id]);
+
+                $account->update(['current_balance' => $closingBalance]);
                 $account->update(['last_transaction_at' => $request->withdrawn_at]);
 
                 return $withdrawal;
